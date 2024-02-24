@@ -1,0 +1,72 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+  
+  match /{document=**}{
+  	allow read , write: if request.auth.token.email == "mohamedelbaiomy@gmail.com"
+  }
+  
+  function isAuth(){
+       return request.auth != null;
+  }
+  function userHimSelf(id){
+       return request["auth"]["uid"] == id;
+  }
+   
+  function orderPath(request){
+      return /databases/$(database)/documents/orders/$(request.resource.data.orderid);
+  }
+  
+  match /customers/{cid}/{document=**}{
+      allow read: if isAuth();
+      allow write: if userHimSelf(cid); 
+  }
+    
+  match /suppliers/{sid}{
+    	allow read: if isAuth();
+      allow write: if userHimSelf(sid);
+      
+      match /subscriptions/{cid}{
+            allow read : if isAuth();
+            allow write: if userHimSelf(cid);
+      }
+    
+       
+  }
+    
+  match /products/{proId}{
+     allow read;
+     allow create: if isAuth() &&
+     userHimSelf(request.resource.data.sid);
+     allow update: if userHimSelf(request.resource.data.sid) ||
+     get(request.path).data.proid == proId ;
+     allow delete: if  userHimSelf(get(request.path).data.sid);
+      
+     match /reviews/{cid}{
+      	allow read;
+        allow write: if (isAuth() 
+        //&& exists(orderPath(request)) 
+        //&& get(orderPath(request)).data.deliverystatus == "delivered" 
+        && userHimSelf(cid)); 
+     }
+      
+  }
+    match /asks/{askId} {
+       allow read :if isAuth();
+       allow create: if userHimSelf(request.resource.data.cid);
+       allow update: if userHimSelf(request.resource.data.sid) ||
+                     userHimSelf(request.resource.data.cid);
+       allow delete: if  userHimSelf(get(request.path).data.sid) ||
+                      userHimSelf(get(request.path).data.cid);
+       allow write : if userHimSelf(request.resource.data.sid) ||
+                     userHimSelf(request.resource.data.cid);
+  }
+  match /orders/{orderId}{
+     allow read: if isAuth();
+     allow create: if userHimSelf(request.resource.data.cid) ;
+     allow update: if userHimSelf(request.resource.data.sid) ||
+     userHimSelf(request.resource.data.cid);
+  }
+    
+ }
+}

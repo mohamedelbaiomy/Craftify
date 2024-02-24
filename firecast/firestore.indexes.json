@@ -1,0 +1,83 @@
+{
+  "indexes": [
+    {
+      "collectionGroup": "asks",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "cid",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "askdate",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "asks",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "sid",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "orderdate",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "orders",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "cid",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "orderdate",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "orders",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "deliverystatus",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "sid",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "orderdate",
+          "order": "DESCENDING"
+        }
+      ]
+    },
+    {
+      "collectionGroup": "products",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "maincateg",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "subcateg",
+          "order": "ASCENDING"
+        },
+        {
+          "fieldPath": "price",
+          "order": "ASCENDING"
+        }
+      ]
+    }
+  ],
+  "fieldOverrides": []
+}
